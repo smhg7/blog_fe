@@ -1,59 +1,63 @@
-// src/AddBlog.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, TextField, Button, Typography } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 
 const AddBlog = () => {
   const [title, setTitle] = useState('');
   const [subTitle, setSubTitle] = useState('');
   const [date, setDate] = useState('');
-  const [description, setDescription] = useState('');
-  const [author, setAuthor] = useState('');
   const [html, setHtml] = useState('');
-  const [imgSrc, setImgSrc] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const handleAddBlog = async () => {
-    const token = localStorage.getItem('token'); // Get the token from local storage
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('You must be logged in to add a blog.');
+      return;
+    }
 
     try {
       const response = await axios.post('https://web-production-8d9c.up.railway.app/addblog', {
-        token,
         date,
         Title: title,
         'sub title': subTitle,
-        description,
-        author,
         html,
-        img_src: imgSrc
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the Authorization header
+        }
       });
 
       if (response.data.success) {
         setSuccess('Blog added successfully!');
-        // Clear form fields
         setTitle('');
         setSubTitle('');
         setDate('');
-        setDescription('');
-        setAuthor('');
         setHtml('');
-        setImgSrc('');
       } else {
         setError(response.data.message);
       }
     } catch (error) {
-      setError('Failed to add blog. Please try again.');
+      if (error.response && error.response.status === 401) {
+        alert('Your session has expired. Please log in again.');
+      } else {
+        setError('Failed to add blog. Please try again.');
+      }
     }
   };
 
   return (
-    <Box sx={{ width: '600px', margin: 'auto', padding: '20px' }}>
-      <Typography variant="h4">Add Blog</Typography>
+    <Paper elevation={3} sx={{ width: '600px', margin: '40px auto', padding: '30px', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
+      <Typography variant="h4" align="center" sx={{ marginBottom: '20px', color: '#81A3C1' }}>
+        Add Blog
+      </Typography>
       <TextField
         label="Title"
         fullWidth
         margin="normal"
+        variant="outlined"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -61,6 +65,7 @@ const AddBlog = () => {
         label="Subtitle"
         fullWidth
         margin="normal"
+        variant="outlined"
         value={subTitle}
         onChange={(e) => setSubTitle(e.target.value)}
       />
@@ -74,43 +79,25 @@ const AddBlog = () => {
         onChange={(e) => setDate(e.target.value)}
       />
       <TextField
-        label="Description"
-        fullWidth
-        margin="normal"
-        multiline
-        rows={4}
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <TextField
-        label="Author"
-        fullWidth
-        margin="normal"
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-      />
-      <TextField
         label="HTML Content"
         fullWidth
         margin="normal"
+        variant="outlined"
         multiline
         rows={6}
         value={html}
         onChange={(e) => setHtml(e.target.value)}
       />
-      <TextField
-        label="Image Source"
-        fullWidth
-        margin="normal"
-        value={imgSrc}
-        onChange={(e) => setImgSrc(e.target.value)}
-      />
-      {error && <Typography color="error">{error}</Typography>}
-      {success && <Typography color="success">{success}</Typography>}
-      <Button variant="contained" color="primary" onClick={handleAddBlog}>
+      {error && <Typography color="error" sx={{ marginTop: '10px' }}>{error}</Typography>}
+      {success && <Typography color="success" sx={{ marginTop: '10px' }}>{success}</Typography>}
+      <Button 
+        variant="contained" 
+        sx={{ marginTop: '20px', backgroundColor: '#81A3C1', color: '#fff', '&:hover': { backgroundColor: '#689DA8' } }} 
+        onClick={handleAddBlog}
+      >
         Add Blog
       </Button>
-    </Box>
+    </Paper>
   );
 };
 

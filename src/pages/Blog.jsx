@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Box, Container, Typography, TextField, Button } from "@mui/material";
+import { Box, Container, Typography, Skeleton } from "@mui/material";
 import './style.css';
 
 const Blog = () => {
-
   const [blog, setBlog] = useState(null); 
   const [error, setError] = useState(null);
   const { blog_id } = useParams();
@@ -29,7 +28,8 @@ const Blog = () => {
         setError('Failed to fetch blog');
       }
     };
-
+    
+    window.scrollTo(0, 0);
     fetchBlog();
   }, [blog_id]);
 
@@ -37,17 +37,23 @@ const Blog = () => {
     <div>
       {error && <p>{error}</p>}
       <Container sx={{ height: "100vh" }}>
-      {blog ? (
-        <div sx={{}}>
-          <h2>{blog.Title}</h2>
-          <p><strong>Author:</strong> {blog.author}</p>
-          <p><strong>Date:</strong> {blog.date}</p>
-          <p><strong>Subtitle:</strong> {blog['sub title']}</p>
-          <div dangerouslySetInnerHTML={{ __html: blog.html }} />
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+        {blog ? (
+          <div>
+            <Typography variant="h1" component="h1" color='#5684AC'>{blog.Title}</Typography>
+            <Typography variant="h6" component="h6">{blog['sub title']}</Typography>
+            <p><strong>Date:</strong> {blog.date}</p>
+            <hr />
+            <div dangerouslySetInnerHTML={{ __html: blog.html }} />
+          </div>
+        ) : (
+          <Box>
+            <Skeleton variant="text" height={40} width="80%" />
+            <Skeleton variant="text" height={30} width="60%" />
+            <Skeleton variant="rectangular" height={300} sx={{ marginTop: 2 }} />
+            <Skeleton variant="text" height={20} width="50%" sx={{ marginTop: 2 }} />
+            <Skeleton variant="text" height={20} width="50%" sx={{ marginTop: 2 }} />
+          </Box>
+        )}
       </Container>
     </div>
   );
