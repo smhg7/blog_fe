@@ -142,8 +142,9 @@ nav ul li a {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns */
+  padding-left: 2%;
+  /* display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); Responsive columns */
   gap: 16px; /* Space between items */
 }
 
@@ -151,3 +152,33 @@ nav ul li a {
   box-sizing: border-box;
   padding-top: 20px;
 }
+
+/* date picker */
+.ppDate {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-right: 10px;
+  width: 100%; /* Make width responsive */
+  max-width: 150px; /* Set a maximum width */
+  height: 34px; /* Increased height */
+  transition: border-color 0.3s ease;
+  margin-left: 10px;
+  background-color: transparent; /* Make background transparent */
+}
+
+.ppDate:focus {
+  outline: none;
+  border-color: #3f51b5; /* MUI primary color */
+  box-shadow: 0 0 5px rgba(63, 81, 181, 0.5);
+}
+
+/* Optional: For better mobile responsiveness */
+@media (max-width: 600px) {
+  .ppDate {
+    max-width: 100%; /* Full width on smaller screens */
+  }
+}
+
+
+/* footer */
