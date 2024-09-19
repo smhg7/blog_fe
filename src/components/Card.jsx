@@ -15,7 +15,7 @@ const truncateDescription = (description, charLimit) => {
 
 
 export default function ActionAreaCard({title, description, image, date}) {
-    description = truncateDescription(description,135);
+    description = truncateDescription(description,112);
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>

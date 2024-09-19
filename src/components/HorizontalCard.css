@@ -1,0 +1,10 @@
+.heading {
+    margin: 0;
+    color: #769BBB; /* Default color */
+    transition: color 0.3s; /* Smooth transition */
+  }
+  
+  .heading:hover {
+    color: #98b4cc; /* Color on hover */
+  }
+  
