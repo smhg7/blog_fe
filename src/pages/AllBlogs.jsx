@@ -3,25 +3,66 @@ import axios from 'axios';
 import { Box, Container, Typography, TextField, Button, Skeleton } from "@mui/material";
 import '../App.css';
 import ColorToggleButton from '../components/Toggel';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import BasicPagination from '../components/pagination';
 import { useNavigate } from 'react-router-dom';
 import HorizontalCard from '../components/HorizontalCard';
+import BasicSelect from '../components/yeardropdown';
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
   const [alignment, setAlignment] = useState(true); 
   const [page, setPage] = useState(0);
-  
+  const [Year, setYear] =useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [BlogCount, setBlogCount] = useState(""); // State for date input
   const [loading, setLoading] = useState(true); // State for loading indicator
+  const [month,setMonths] =useState(null);
+  const [week,setWeeks] = useState(null)
+  const [tag,setTags] = useState(null)
   const pageSize = 18;
   const navigate = useNavigate();
 
-  const fetchBlogs = async (pageNum, latest, searchTerm) => {
+  const yearList = [
+    { value: null, label: 'All Years' },
+    { value: 2019, label: 'Year 2019' },
+    { value: 2020, label: 'Year 2020' },
+    { value: 2021, label: 'Year 2021' },
+    { value: 2022, label: 'Year 2022' },
+    { value: 2023, label: 'Year 2023' },
+    { value: 2024, label: 'Year 2024' },
+    { value: 2025, label: 'Year 2025' },
+    { value: 2026, label: 'Year 2026' },
+    // Add more items as needed
+  ];
+
+  const monthList = [
+    { value: null, label: 'All Months' },
+    { value: "01", label: 'January' },
+    { value: "02", label: 'February' },
+    { value: "03", label: 'March' },
+    { value: "04", label: 'April' },
+    { value: "05", label: 'May' },
+    { value: "06", label: 'June' },
+    { value: "07", label: 'July' },
+    { value: "08", label: 'August' },
+    { value: "09", label: 'September' },
+    { value: "10", label: 'October' },
+    { value: "11", label: 'November' },
+    { value: "12", label: 'December' },
+  ];
+  
+  const weekList = [
+    { value: null, label: 'All Week' },
+    { value: 1, label: 'Week 1' },
+    { value: 2, label: 'Week 2' },
+    { value: 3, label: 'Week 3' },
+    { value: 4, label: 'Week 4' },
+  ];
+  const prompts= tag
+
+
+  const fetchBlogs = async (pageNum, latest, searchTerm, Year, month, week) => {
     
     try {
       setLoading(true); // Set loading to true when fetching data
@@ -32,6 +73,9 @@ const Blogs = () => {
           skip: pageNum * pageSize,
           latest: latest,
           words: searchTerm,
+          week: week ,
+          month:month ,
+          year:Year
           
         },
         {
@@ -40,37 +84,40 @@ const Blogs = () => {
           }
         }
       );
+      console.log(response.data)
       if (response.data['blogs'].length === 0) {
         setBlogs([]);
         setBlogCount(response.data['count']);
+        setTags(response.data['top_tags'])
+        
       
       } else{
         
         setBlogs(response.data['blogs']);
         setBlogCount(response.data['count']);
+        setTags(response.data['top_tags'])
       }
+      console.log("tag=",tag)
       setLoading(false); // Set loading to false after data is fetched
     } catch (err) {
       setError('Failed to fetch blogs');
       setLoading(false); // Ensure loading is false even if there's an error
+      console.log(err)
     }
   };
 
   useEffect(() => {
-    fetchBlogs(page, alignment, searchTerm); // Include date in fetch
-  }, [page, alignment, searchTerm]);
+    fetchBlogs(page, alignment, searchTerm, Year, month, week); // Include date in fetch
+  }, [page, alignment, searchTerm, Year, month, week]);
+
+  useEffect(() => {
+    const storedTerm = localStorage.getItem('searchTerm') || '';
+    setSearchTerm(storedTerm);
+  }, []);
 
   const handleToggleChange = (newValue) => {
     setAlignment(newValue);
     setPage(0);
-  };
-
-  const nextButton = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
-  const prevButton = () => {
-    setPage(prevPage => Math.max(prevPage - 1, 0));
   };
 
   const handleCardClick = (blog_id) => {
@@ -126,16 +173,64 @@ const Blogs = () => {
             variant="outlined"
             label="Search"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+                setSearchTerm(e.target.value);
+                localStorage.setItem('searchTerm', e.target.value);
+              }}
             sx={{
               flex: '1 1 auto', 
               marginBottom: 0,
               paddingRight:'10px'
             }}
           />
-          <Typography gutterBottom sx={{marginRight:1}}>DATE</Typography>
+          
+          {/* <Typography gutterBottom sx={{marginRight:1}}>DATE</Typography> */}
           <ColorToggleButton alignment={alignment} onToggleChange={handleToggleChange} />
         </Box>
+        <Box
+        sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center', // Align items to the left
+            p: 2,
+            flexWrap: 'wrap',
+            gap: 5
+          }}>
+        <BasicSelect items={yearList} name="Year"  
+          onChange={(selectedYear) => setYear(selectedYear)} />
+          <BasicSelect items={monthList} name="Month"  
+          onChange={(selectedYear) => setMonths(selectedYear)} />
+          <BasicSelect items={weekList} name="Week"  
+          onChange={(selectedYear) => setWeeks(selectedYear)} />
+        </Box>
+
+        <Box>
+        {Array.isArray(tag) && tag.length > 0 ? (
+          tag.map((prompt, index) => (
+            <Button
+              key={index}
+              variant="outlined"
+              onClick={() => {
+                setSearchTerm(prompt);
+                localStorage.setItem('searchTerm', prompt);
+              }}
+              sx={{ margin: '5px' }} // Add margin for spacing between buttons
+            >
+              {prompt}
+            </Button>
+          ))
+        ) : (
+          <Typography>No tags available</Typography> // Fallback message
+        )}
+      </Box>
+
+        
+        <Box>
+          {searchTerm && (
+            <Typography variant='h4' color="#5F8BB0" sx ={{pl:2}}>Search Results: {searchTerm}</Typography>
+          )}
+        </Box>
+        
         
         <ul className="no-bullets">
           {loading ? (
@@ -169,6 +264,7 @@ const Blogs = () => {
             console.log(page)
             if (newPage !== null) {
               setPage(newPage - 1); 
+              window.scrollTo(0, 0);
             }
           }}
         />  
