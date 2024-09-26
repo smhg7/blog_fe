@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Container, Typography, TextField, Button, Skeleton } from "@mui/material";
+import { Box, Container, Typography, TextField, Button, Skeleton, Fab } from "@mui/material";
 import '../App.css';
 import ColorToggleButton from '../components/Toggel';
 import BasicPagination from '../components/pagination';
@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import HorizontalCard from '../components/HorizontalCard';
 import BasicSelect from '../components/yeardropdown';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+import Footer from '../components/FooterMenu';
+import AddIcon from '@mui/icons-material/Add';
 
 
 const Blogs = () => {
@@ -63,6 +65,14 @@ const Blogs = () => {
   ];
   const prompts= tag
 
+  const isTokenValid = () => {
+    const token = localStorage.getItem('token');
+    const expirationTime = localStorage.getItem('tokenExpiration');
+
+    if (!token || !expirationTime) return false;
+
+    return Date.now() < parseInt(expirationTime, 10);
+  };
 
   const fetchBlogs = async (pageNum, latest, searchTerm, Year, month, week) => {
     
@@ -149,7 +159,7 @@ const Blogs = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <img src="https://substackcdn.com/image/fetch/w_1360,c_limit,f_webp,q_auto:best,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc6c8bc6f-62eb-4e68-8186-152b6e8a7e32_500x500.png" alt="Hero"
         style={{ 
-          width: '30%', 
+          width: '20%', 
           height: 'auto', 
           // maxWidth: '150px', // Set maximum width for the image
           // maxHeight: '50px' // Set maximum height for the image
@@ -158,7 +168,7 @@ const Blogs = () => {
 
       <Box sx={{ display: 'flex',alignItems: 'center', justifyContent:"center"}}>
       
-        <Typography variant='h3' color="#5F8BB0" sx={{textAlign:'center'}}>THAT BUSINESS OF MEANING</Typography>
+        <Typography variant='h4' color="#5F8BB0" sx={{textAlign:'center'}}>THAT BUSINESS OF MEANING</Typography>
       </Box>
         {/* search + sort */}
         <Box
@@ -190,7 +200,8 @@ const Blogs = () => {
         </Box>
 
         {/* tags */}
-        <Box sx={{backgroundColor:'#e8eff4', borderRadius: '8px', padding: "20px 16px", pl:2}}>
+        <Box sx={{pl:2}}>
+        <Box sx={{backgroundColor:'#e8eff4', borderRadius: '8px', padding: "20px 16px", pl:1}}>
           <Typography variant='h6' color="#5F8BB0" sx ={{pl:1}}>Popular Tags</Typography>
             {Array.isArray(tag) && tag.length > 0 ? (
             tag.map((prompt, index) => (
@@ -207,8 +218,14 @@ const Blogs = () => {
               </Button>
             ))
             ) : (
-            <Typography>No tags available</Typography> // Fallback message
+              <Box sx={{display:'flex'}}>
+              {Array.from({ length: 10 }).map((_, index) => (
+        <Skeleton key={index} variant="rectangular" width={100} height={40} sx={{ margin: '5px', borderRadius: '8px'  }} />
+      ))}
+              </Box>
+              
           )}
+        </Box>
         </Box>
 
         {/* date sort */}
@@ -323,7 +340,19 @@ const Blogs = () => {
           }}
         />  
         </Box>
+        {isTokenValid() && ( // Only render if the token is present
+          <Fab 
+            color="primary" 
+            aria-label="add" 
+            sx={{ position: 'fixed', bottom: 16, right:{ xs: 16,sm: 16, md: 200 }}}
+            onClick={() => navigate('/addblog')}
+          >
+            <AddIcon />
+          </Fab>
+        )}
+        <Footer />
       </Container>
+      
     </div>
   );
 };

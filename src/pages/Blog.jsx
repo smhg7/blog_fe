@@ -5,6 +5,8 @@ import { Box, Container, Typography, Skeleton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import './style.css';
+import Footer from '../components/FooterMenu';
+import { Padding } from '@mui/icons-material';
 
 const Blog = () => {
   const [blog, setBlog] = useState(null); 
@@ -69,18 +71,22 @@ const Blog = () => {
       {error && <p>{error}</p>}
       <Container sx={{ height: "100vh" }}>
         {blog ? (
-          <div>
+          <div style={{ paddingTop: '20px' }}>
             <Typography 
               variant="h1" 
               component="h1" 
-              color='#5684AC' 
+              color='#81A3C1' 
+              
               sx={{ 
                 fontSize: { xs: '2rem', sm: '3rem', md: '4rem' },
-                lineHeight: { xs: 1.2, sm: 1.3, md: 1.4 }
+                lineHeight: { xs: 1.2, sm: 1.3, md: 1.4 },
+                fontWeight: 400,
+                fontFamily: 'Arial, sans-serif'
               }}
             >
               {blog.Title}
             </Typography>
+
 
             <Typography variant="h6" component="h6">{blog['sub title']}</Typography>
             <p><strong>Date:</strong> {blog.date}</p>
@@ -104,6 +110,7 @@ const Blog = () => {
             <Skeleton variant="text" height={20} width="50%" sx={{ marginTop: 2 }} />
           </Box>
         )}
+        <Footer />
       </Container>
     </div>
   );

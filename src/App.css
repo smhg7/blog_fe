@@ -43,8 +43,8 @@ body {
   font-family: Poppins, sans-serif;
 }
 
-.container {
-  max-width: 1200px;
+.container1 {
+  max-width: 1130px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -58,7 +58,7 @@ top: 0;
 z-index: 10;
 }
 
-header .container {
+header .container1 {
   display: flex;
   justify-content: space-between;
   align-items: center;

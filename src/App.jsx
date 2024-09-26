@@ -5,6 +5,7 @@ import Blog from './pages/Blog';
 import Login from './pages/Login';
 import AddBlog from './pages/AddBlog';
 import Test from './pages/Test';
+import Footer from './components/FooterMenu';
 
 
 
@@ -13,17 +14,18 @@ function App() {
   return (
     <>
        <header>
-        <div class="container">
+        <div class="container1">
             <div class="logo">PETER SPEAR</div>
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/about">About</a></li>
-                    <li><a href="/login">Login</a></li>
+                    {/* <li><a href="/login">Login</a></li> */}
                 </ul>
             </nav>
         </div>
     </header>
+    
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AllBlogs />} />
@@ -32,9 +34,9 @@ function App() {
           <Route path="/addblog" element={<AddBlog />} />
           <Route path="/about" element={<Test />} />
         </Routes>
+        {/* <Footer /> */}
       </BrowserRouter>
-      
-      
+    
     </>
   );
 }
