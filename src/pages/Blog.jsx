@@ -10,8 +10,12 @@ const Blog = () => {
   const [blog, setBlog] = useState(null); 
   const [error, setError] = useState(null);
   const { blog_id } = useParams();
-  const token = localStorage.getItem('token');
   const navigate = useNavigate(); // Initialize the navigate function
+
+  const isTokenValid = () => {
+    const expirationTime = localStorage.getItem('tokenExpiration');
+    return expirationTime && new Date().getTime() < expirationTime;
+  };
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -32,12 +36,18 @@ const Blog = () => {
   }, [blog_id]);
 
   const handleDelete = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token || !isTokenValid()) {
+      alert('Your session has expired. Please log in again.');
+      return;
+    }
+
     try {
       await axios.post(
         'https://web-production-8d9c.up.railway.app/deleteblog',
         {
           "blog_id": blog_id,
-          "token": token
         },
         {
           headers: {
@@ -60,12 +70,23 @@ const Blog = () => {
       <Container sx={{ height: "100vh" }}>
         {blog ? (
           <div>
-            <Typography variant="h1" component="h1" color='#5684AC'>{blog.Title}</Typography>
+            <Typography 
+              variant="h1" 
+              component="h1" 
+              color='#5684AC' 
+              sx={{ 
+                fontSize: { xs: '2rem', sm: '3rem', md: '4rem' },
+                lineHeight: { xs: 1.2, sm: 1.3, md: 1.4 }
+              }}
+            >
+              {blog.Title}
+            </Typography>
+
             <Typography variant="h6" component="h6">{blog['sub title']}</Typography>
             <p><strong>Date:</strong> {blog.date}</p>
 
-            {/* Only render the delete button if the token is present */}
-            {token && (
+            {/* Only render the delete button if the token is present and valid */}
+            {isTokenValid() && (
               <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleDelete}>
                 Delete
               </Button>

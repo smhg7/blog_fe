@@ -29,6 +29,8 @@ const Login = () => {
       if (response.data.success) {
         localStorage.setItem('token', response.data.message.token); // Store the token
         setSuccess('Login successful!');
+        const expirationTime = new Date().getTime() + 4 * 60 * 60 * 1000;
+        localStorage.setItem('tokenExpiration', expirationTime);
         navigate('/addblog'); // Redirect to add blog page
       } else {
         setError(response.data.message);

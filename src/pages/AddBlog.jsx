@@ -10,11 +10,16 @@ const AddBlog = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const isTokenValid = () => {
+    const expirationTime = localStorage.getItem('tokenExpiration');
+    return expirationTime && new Date().getTime() < expirationTime;
+  };
+
   const handleAddBlog = async () => {
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      alert('You must be logged in to add a blog.');
+    if (!token || !isTokenValid()) {
+      alert('Your session has expired. Please log in again.');
       return;
     }
 

@@ -7,6 +7,8 @@ import BasicPagination from '../components/pagination';
 import { useNavigate } from 'react-router-dom';
 import HorizontalCard from '../components/HorizontalCard';
 import BasicSelect from '../components/yeardropdown';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -142,7 +144,7 @@ const Blogs = () => {
       
 
       {error && <p>{error}</p>}
-      
+      {/* hero section */}
       <Container sx={{ height: "100vh", paddingBottom:"10px" ,justifyContent:"center"}}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <img src="https://substackcdn.com/image/fetch/w_1360,c_limit,f_webp,q_auto:best,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc6c8bc6f-62eb-4e68-8186-152b6e8a7e32_500x500.png" alt="Hero"
@@ -152,14 +154,13 @@ const Blogs = () => {
           // maxWidth: '150px', // Set maximum width for the image
           // maxHeight: '50px' // Set maximum height for the image
         }} />
-        {/* <h1>THAT BUSINESS OF MEANING</h1> */}
       </Box>
 
       <Box sx={{ display: 'flex',alignItems: 'center', justifyContent:"center"}}>
-      {/* <img src="https://substackcdn.com/image/fetch/w_1360,c_limit,f_webp,q_auto:best,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc6c8bc6f-62eb-4e68-8186-152b6e8a7e32_500x500.png" alt="Hero" />  */}
       
-      <Typography variant='h3' color="#5F8BB0">THAT BUSINESS OF MEANING</Typography>
+        <Typography variant='h3' color="#5F8BB0" sx={{textAlign:'center'}}>THAT BUSINESS OF MEANING</Typography>
       </Box>
+        {/* search + sort */}
         <Box
           sx={{
             display: 'flex',
@@ -187,73 +188,126 @@ const Blogs = () => {
           {/* <Typography gutterBottom sx={{marginRight:1}}>DATE</Typography> */}
           <ColorToggleButton alignment={alignment} onToggleChange={handleToggleChange} />
         </Box>
-        <Box
-        sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'center', // Align items to the left
-            p: 2,
-            flexWrap: 'wrap',
-            gap: 5
-          }}>
-        <BasicSelect items={yearList} name="Year"  
-          onChange={(selectedYear) => setYear(selectedYear)} />
-          <BasicSelect items={monthList} name="Month"  
-          onChange={(selectedYear) => setMonths(selectedYear)} />
-          <BasicSelect items={weekList} name="Week"  
-          onChange={(selectedYear) => setWeeks(selectedYear)} />
-        </Box>
 
-        <Box>
-        {Array.isArray(tag) && tag.length > 0 ? (
-          tag.map((prompt, index) => (
-            <Button
-              key={index}
-              variant="outlined"
-              onClick={() => {
-                setSearchTerm(prompt);
-                localStorage.setItem('searchTerm', prompt);
-              }}
-              sx={{ margin: '5px' }} // Add margin for spacing between buttons
-            >
-              {prompt}
-            </Button>
-          ))
-        ) : (
-          <Typography>No tags available</Typography> // Fallback message
-        )}
-      </Box>
-
-        
-        <Box>
-          {searchTerm && (
-            <Typography variant='h4' color="#5F8BB0" sx ={{pl:2}}>Search Results: {searchTerm}</Typography>
+        {/* tags */}
+        <Box sx={{backgroundColor:'#e8eff4', borderRadius: '8px', padding: "20px 16px", pl:2}}>
+          <Typography variant='h6' color="#5F8BB0" sx ={{pl:1}}>Popular Tags</Typography>
+            {Array.isArray(tag) && tag.length > 0 ? (
+            tag.map((prompt, index) => (
+              <Button
+                key={index}
+                variant="outlined"
+                onClick={() => {
+                  setSearchTerm(prompt);
+                  localStorage.setItem('searchTerm', prompt);
+                }}
+                sx={{ margin: '5px' }} // Add margin for spacing between buttons
+              >
+                {prompt}
+              </Button>
+            ))
+            ) : (
+            <Typography>No tags available</Typography> // Fallback message
           )}
         </Box>
+
+        {/* date sort */}
+        {/* search results */}
+        <Box
+          sx={{
+            pt:"15px",
+            display: 'flex',
+            flexDirection: { xs: 'column-reverse', md: 'row' }, // Reverse order on mobile
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+          }}
+        >
+          {searchTerm ? (
+            <Typography 
+              variant='h5' 
+              color="#5F8BB0" 
+              sx={{ 
+                pt: { xs: 1, md: 2 }, 
+                mb: { xs: 2, md: 0 }, 
+                width: '100%', 
+                pl: { xs: 1, md: 3 } 
+              }}
+            >
+              Search Results: {searchTerm}
+            </Typography>
+          ) : (
+            <Typography 
+              variant='h5' 
+              color="#5F8BB0" 
+              sx={{ 
+                pt: { xs: 1, md: 2 }, 
+                mb: { xs: 2, md: 0 }, 
+                width: '100%', 
+                pl: { xs: 1, md: 3 } 
+              }}
+            >
+              Recent Blogs
+            </Typography>
+          )}
+
+          {/* Date sort - now on top on mobile */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              gap: { xs: 1, md: 0.5 },
+              justifyContent: { xs: 'flex-start', md: 'flex-end' }, // Align to start on mobile, end on larger screens
+              width: '100%', // Full width on mobile
+            }}
+          >
+            <BasicSelect items={yearList} name="Year" onChange={(selectedYear) => setYear(selectedYear)} />
+            <BasicSelect items={monthList} name="Month" onChange={(selectedMonth) => setMonths(selectedMonth)} />
+            <BasicSelect items={weekList} name="Week" onChange={(selectedWeek) => setWeeks(selectedWeek)} />
+          </Box>
+        </Box>
+
         
         
         <ul className="no-bullets">
-          {loading ? (
-            // Display skeletons while loading
-            Array.from(new Array(pageSize)).map((_, index) => (
-              <li key={index}>
-                <Skeleton variant="rectangular" height={100} sx={{ marginBottom: 2 }} />
+            {loading ? (
+              // Display skeletons while loading
+              Array.from(new Array(pageSize)).map((_, index) => (
+                <li key={index}>
+                  <Skeleton variant="rectangular" height={100} sx={{ marginBottom: 2 }} />
+                </li>
+              ))
+            ) : blogs.length === 0 ? (
+              // Display a message when there are no blogs
+              <li>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',  // Center horizontally
+                    alignItems: 'center',      // Center vertically
+                    // height: '100vh',           // Full viewport height (or adjust as needed)
+                  }}
+                >
+                  <FilterAltOffIcon sx={{ fontSize: 100 }} /> {/* Adjust fontSize to enlarge */}
+                </Box>
+                <Typography variant="h6" align="center" color="textSecondary" pb={1}>
+                  No blogs available for this filter.
+                </Typography>
               </li>
-            ))
-          ) : (
-            // Display actual blog cards once loading is done
-            blogs.map(blog => (
-              <li key={blog.blog_id} onClick={() => handleCardClick(blog.blog_id)}>
-                <HorizontalCard 
-                  title={blog.Title} 
-                  description={blog.description} 
-                  image={blog.img_src} 
-                  date={blog.date} 
-                />
-              </li>
-            ))
-          )}
+            ) : (
+              // Display actual blog cards once loading is done
+              blogs.map(blog => (
+                <li key={blog.blog_id} onClick={() => handleCardClick(blog.blog_id)}>
+                  <HorizontalCard 
+                    title={blog.Title} 
+                    description={blog.description} 
+                    image={blog.img_src} 
+                    date={blog.date} 
+                  />
+                </li>
+              ))
+            )}
         </ul>
+
         
       
         <Box sx={{display:"flex", alignContent:"center", justifyContent:"center", paddingTop:"10px"}}>
