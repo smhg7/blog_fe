@@ -316,7 +316,13 @@ const Blogs = () => {
                 <li key={blog.blog_id} onClick={() => handleCardClick(blog.blog_id)}>
                   <HorizontalCard 
                     title={blog.Title} 
-                    description={blog.description} 
+                    description={
+                      <ul>
+                        {blog.description.map((desc, index) => (
+                          <li key={index} style={{ margin: '2px 0' }} dangerouslySetInnerHTML={{ __html: desc }} />
+                         ))}
+                      </ul>
+                    }
                     image={blog.img_src} 
                     date={blog.date} 
                   />

@@ -150,7 +150,7 @@ nav ul li a {
 
 .no-bullets li {
   box-sizing: border-box;
-  padding-top: 20px;
+  padding-top: 0px;
 }
 
 /* date picker */
