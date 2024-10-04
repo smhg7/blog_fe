@@ -10,6 +10,10 @@ import BasicSelect from '../components/yeardropdown';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import Footer from '../components/FooterMenu';
 import AddIcon from '@mui/icons-material/Add';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
+import NewCard from '../components/NewCard';
 
 
 const Blogs = () => {
@@ -136,22 +140,24 @@ const Blogs = () => {
     navigate(`/blog/${blog_id}`); 
   };
 
+  const darkenColor = (color, amount) => {
+    let col = color.substring(1); // remove the '#' character
+    let num = parseInt(col, 16); // convert to integer
+    let r = (num >> 16) - amount; // extract red
+    let g = (num >> 8 & 0x00FF) - amount; // extract green
+    let b = (num & 0x0000FF) - amount; // extract blue
+  
+    // Ensure values are within the RGB range
+    r = Math.max(0, Math.min(255, r));
+    g = Math.max(0, Math.min(255, g));
+    b = Math.max(0, Math.min(255, b));
+  
+    return `#${(0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1)}`; // convert back to hex
+  };
+
   return (
     <div>
-      {/* <main>
-        <section className="hero">
-          <div className="container">
-            <div className="hero-image">
-              <img src="https://substackcdn.com/image/fetch/w_1360,c_limit,f_webp,q_auto:best,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc6c8bc6f-62eb-4e68-8186-152b6e8a7e32_500x500.png" alt="Hero" /> 
-            </div>
-            <div className="hero-text">
-              <h1>THAT BUSINESS OF MEANING</h1>
-              <a href="tel:1234567890" className="call-now">Call Now</a>
-            </div>
-          </div>
-        </section>
-      </main> */}
-      
+     
 
       {error && <p>{error}</p>}
       {/* hero section */}
@@ -161,14 +167,13 @@ const Blogs = () => {
         style={{ 
           width: '20%', 
           height: 'auto', 
-          // maxWidth: '150px', // Set maximum width for the image
-          // maxHeight: '50px' // Set maximum height for the image
+         
         }} />
       </Box>
 
       <Box sx={{ display: 'flex',alignItems: 'center', justifyContent:"center"}}>
       
-        <Typography variant='h4' color="#5F8BB0" sx={{textAlign:'center'}}>THAT BUSINESS OF MEANING</Typography>
+        <Typography variant='h4' color="black" sx={{textAlign:'center'}}>THAT BUSINESS OF MEANING</Typography>
       </Box>
         {/* search + sort */}
         <Box
@@ -176,7 +181,8 @@ const Blogs = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            p: 2,
+            pl: 2,
+            paddingBottom: 2,
             flexWrap: 'wrap'
           }}
         >
@@ -195,37 +201,71 @@ const Blogs = () => {
             }}
           />
           
-          {/* <Typography gutterBottom sx={{marginRight:1}}>DATE</Typography> */}
           <ColorToggleButton alignment={alignment} onToggleChange={handleToggleChange} />
+        </Box>
+        {/* date */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 , pl:2, paddingBottom: 2, flex:1}}>
+            <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2, width: '100%'}}>
+              <CalendarTodayOutlinedIcon />
+              <BasicSelect items={yearList} name="Year" onChange={(selectedYear) => setYear(selectedYear)} sx={{ flex: 1 }}/>
+            </Box>
+            <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2, width: '100%'}}>
+              <CalendarMonthOutlinedIcon />
+              <BasicSelect items={monthList} name="Month" onChange={(selectedMonth) => setMonths(selectedMonth)} />
+            </Box>
+            <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2, width: '100%'}}>
+              <TodayOutlinedIcon />
+              <BasicSelect items={weekList} name="Week" onChange={(selectedWeek) => setWeeks(selectedWeek)} />
+            </Box>
+            
         </Box>
 
         {/* tags */}
-        <Box sx={{pl:2}}>
-        <Box sx={{backgroundColor:'#e8eff4', borderRadius: '8px', padding: "20px 16px", pl:1}}>
-          <Typography variant='h6' color="#5F8BB0" sx ={{pl:1}}>Popular Tags</Typography>
+        <Box sx={{ pl: 2 }}>
+          <Box sx={{ backgroundColor: '#f8fbfb', borderRadius: '8px', padding: "20px 16px", pl: 1 }}>
+            <Typography variant='h6' color="black" sx={{ pl: 1,fontWeight: 'bold' }}>Popular Tags</Typography>
             {Array.isArray(tag) && tag.length > 0 ? (
-            tag.map((prompt, index) => (
-              <Button
-                key={index}
-                variant="outlined"
-                onClick={() => {
-                  setSearchTerm(prompt);
-                  localStorage.setItem('searchTerm', prompt);
-                }}
-                sx={{ margin: '5px' }} // Add margin for spacing between buttons
-              >
-                {prompt}
-              </Button>
-            ))
+              tag.map((prompt, index) => {
+                // Define an array of pastel colors
+                const pastelColors = ['#FFB3BA', '#FFDFBA', '#FFFFBA', '#BAFFB3', '#c0cff0', '#e0ceec'];
+                // Get a random pastel color
+                const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)];
+                // Get a darker shade of the pastel color for the text
+                const textColor = darkenColor(randomColor, 70); // Adjust the amount to control darkness
+
+                return (
+                  <Button
+                    key={index}
+                    variant="contained"
+                    onClick={() => {
+                      setSearchTerm(prompt);
+                      localStorage.setItem('searchTerm', prompt);
+                    }}
+                    sx={{
+                      margin: '5px',
+                      boxShadow: 'none',
+                      borderRadius: '25px', // Round the corners for pill shape
+                      backgroundColor: randomColor, // Set random pastel color
+                      color: textColor, // Set text color to the darker shade
+                      fontWeight: 'bold', 
+                      '&:hover': {
+                        backgroundColor: randomColor, // Keep the same color on hover
+                        color: textColor, // Maintain text color on hover
+                      },
+                    }}
+                  >
+                    {prompt}
+                  </Button>
+                );
+              })
             ) : (
-              <Box sx={{display:'flex'}}>
-              {Array.from({ length: 10 }).map((_, index) => (
-        <Skeleton key={index} variant="rectangular" width={100} height={40} sx={{ margin: '5px', borderRadius: '8px'  }} />
-      ))}
+              <Box sx={{ display: 'flex' }}>
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton key={index} variant="rectangular" width={100} height={40} sx={{ margin: '5px', borderRadius: '8px' }} />
+                ))}
               </Box>
-              
-          )}
-        </Box>
+            )}
+          </Box>
         </Box>
 
         {/* date sort */}
@@ -242,7 +282,7 @@ const Blogs = () => {
           {searchTerm ? (
             <Typography 
               variant='h5' 
-              color="#5F8BB0" 
+              color="black" 
               sx={{ 
                 pt: { xs: 1, md: 2 }, 
                 mb: { xs: 2, md: 0 }, 
@@ -255,7 +295,7 @@ const Blogs = () => {
           ) : (
             <Typography 
               variant='h5' 
-              color="#5F8BB0" 
+              color="black" 
               sx={{ 
                 pt: { xs: 1, md: 2 }, 
                 mb: { xs: 2, md: 0 }, 
@@ -263,7 +303,7 @@ const Blogs = () => {
                 pl: { xs: 1, md: 3 } 
               }}
             >
-              Recent Blogs
+              Search to get started
             </Typography>
           )}
 
@@ -277,80 +317,80 @@ const Blogs = () => {
               width: '100%', // Full width on mobile
             }}
           >
-            <BasicSelect items={yearList} name="Year" onChange={(selectedYear) => setYear(selectedYear)} />
-            <BasicSelect items={monthList} name="Month" onChange={(selectedMonth) => setMonths(selectedMonth)} />
-            <BasicSelect items={weekList} name="Week" onChange={(selectedWeek) => setWeeks(selectedWeek)} />
+
           </Box>
         </Box>
 
         
         
         <ul className="no-bullets">
-            {loading ? (
-              // Display skeletons while loading
-              Array.from(new Array(pageSize)).map((_, index) => (
-                <li key={index}>
-                  <Skeleton variant="rectangular" height={100} sx={{ marginBottom: 2 }} />
-                </li>
-              ))
-            ) : blogs.length === 0 ? (
-              // Display a message when there are no blogs
-              <li>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',  // Center horizontally
-                    alignItems: 'center',      // Center vertically
-                    // height: '100vh',           // Full viewport height (or adjust as needed)
-                  }}
-                >
-                  <FilterAltOffIcon sx={{ fontSize: 100 }} /> {/* Adjust fontSize to enlarge */}
-                </Box>
-                <Typography variant="h6" align="center" color="textSecondary" pb={1}>
-                  No blogs available for this filter.
-                </Typography>
+          {loading ? (
+            // Display skeletons while loading
+            Array.from(new Array(pageSize)).map((_, index) => (
+              <li key={index}>
+                <Skeleton variant="rectangular" height={100} sx={{ marginBottom: 2 }} />
               </li>
-            ) : (
-              // Display actual blog cards once loading is done
-              blogs.map(blog => (
-                <li key={blog.blog_id} onClick={() => handleCardClick(blog.blog_id)}>
-                  <HorizontalCard 
-                    title={blog.Title} 
-                    description={
-                      <ul>
-                        {blog.description.map((desc, index) => (
-                          <li key={index} style={{ margin: '2px 0' }} dangerouslySetInnerHTML={{ __html: desc }} />
-                         ))}
-                      </ul>
-                    }
-                    image={blog.img_src} 
-                    date={blog.date} 
-                  />
-                </li>
-              ))
-            )}
+            ))
+          ) : blogs.length === 0 ? (
+            // Display a message when there are no blogs
+            <li>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <FilterAltOffIcon sx={{ fontSize: 100 }} />
+              </Box>
+              <Typography variant="h6" align="center" color="textSecondary" pb={1}>
+                No blogs available for this filter.
+              </Typography>
+            </li>
+          ) : (
+            blogs.map(blog => (
+              <div key={blog.blog_id}>
+                {blog.description.map((desc, index) => (
+                  <li key={index}>
+                  {/* <li key={index} onClick={() => handleCardClick(blog.blog_id)}></li> */}
+                    <NewCard 
+                      title={blog.Title} // Ensure this matches your blog data
+                      desc={desc} // Pass the individual description
+                      date={blog.date}
+                    />
+                  </li>
+                ))}
+              </div>
+            ))
+          )}
         </ul>
-
+        
+         
         
       
         <Box sx={{display:"flex", alignContent:"center", justifyContent:"center", paddingTop:"10px"}}>
-        <BasicPagination 
-          count={Math.ceil(BlogCount/pageSize)} 
-          page={page + 1} 
-          onChange={(_, newPage) => {
-            console.log(page)
-            if (newPage !== null) {
-              setPage(newPage - 1); 
-              window.scrollTo(0, 0);
-            }
-          }}
-        />  
+        {searchTerm && (
+          <BasicPagination 
+            count={Math.ceil(BlogCount / pageSize)} 
+            page={page + 1} 
+            onChange={(_, newPage) => {
+              console.log(newPage); // Log the new page
+              if (newPage !== null) {
+                setPage(newPage - 1); 
+                window.scrollTo(0, 0);
+              }
+            }}
+          />  
+        )}
+
+
+        
         </Box>
         {isTokenValid() && ( // Only render if the token is present
           <Fab 
             color="primary" 
             aria-label="add" 
-            sx={{ position: 'fixed', bottom: 16, right:{ xs: 16,sm: 16, md: 200 }}}
+            sx={{ position: 'fixed', bottom: 16, right:{ xs: 16,sm: 16, md: 200 }, backgroundColor: 'black'}}
             onClick={() => navigate('/addblog')}
           >
             <AddIcon />

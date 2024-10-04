@@ -55,7 +55,7 @@ const AddBlog = () => {
 
   return (
     <Paper elevation={3} sx={{ width: '600px', margin: '40px auto', padding: '30px', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-      <Typography variant="h4" align="center" sx={{ marginBottom: '20px', color: '#81A3C1' }}>
+      <Typography variant="h4" align="center" sx={{ marginBottom: '20px', color: 'black' }}>
         Add Blog
       </Typography>
       <TextField
@@ -97,7 +97,7 @@ const AddBlog = () => {
       {success && <Typography color="success" sx={{ marginTop: '10px' }}>{success}</Typography>}
       <Button 
         variant="contained" 
-        sx={{ marginTop: '20px', backgroundColor: '#81A3C1', color: '#fff', '&:hover': { backgroundColor: '#689DA8' } }} 
+        sx={{ marginTop: '20px', backgroundColor: 'black', color: '#fff', '&:hover': { backgroundColor: '#689DA8' } }} 
         onClick={handleAddBlog}
       >
         Add Blog

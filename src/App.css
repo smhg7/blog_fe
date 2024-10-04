@@ -25,7 +25,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: black;
 }
 
 @keyframes App-logo-spin {
@@ -41,6 +41,7 @@
 body {
   margin: 0;
   font-family: Poppins, sans-serif;
+  background-color: white;
 }
 
 .container1 {
@@ -50,7 +51,7 @@ body {
 }
 
 header {
-  background-color: #98b4cc;
+  background-color: black;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 padding: 0 20px;
 position: sticky;
@@ -180,5 +181,8 @@ nav ul li a {
   }
 }
 
+.css-ece9u5{
+  flex:1
+}
 
 /* footer */

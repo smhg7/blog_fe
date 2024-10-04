@@ -5,7 +5,8 @@ import Blog from './pages/Blog';
 import Login from './pages/Login';
 import AddBlog from './pages/AddBlog';
 import Test from './pages/Test';
-import Footer from './components/FooterMenu';
+import './App.css';
+document.body.style = 'background: white;'
 
 
 
@@ -34,9 +35,8 @@ function App() {
           <Route path="/addblog" element={<AddBlog />} />
           <Route path="/about" element={<Test />} />
         </Routes>
-        {/* <Footer /> */}
       </BrowserRouter>
-    
+      
     </>
   );
 }

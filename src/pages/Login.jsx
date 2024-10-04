@@ -46,11 +46,11 @@ const Login = () => {
           display: 'flex', 
           justifyContent: 'center', 
           alignItems: 'center', 
-          height: '100vh', 
-          backgroundColor: '#f4f4f4' 
+          height: '50vh', 
+          backgroundColor: 'white' 
         }}>
         <Paper elevation={3} sx={{ padding: '40px', borderRadius: '10px', width: '300px' }}>
-          <Typography variant="h4" align="center" gutterBottom color="#81A3C1">
+          <Typography variant="h4" align="center" gutterBottom color="black">
             Admin Login
           </Typography>
           <TextField
@@ -76,7 +76,7 @@ const Login = () => {
             variant="contained" 
             onClick={handleLogin} 
             fullWidth
-            sx={{ marginTop: '20px', backgroundColor: '#81A3C1' }}
+            sx={{ marginTop: '20px', backgroundColor: 'black' }}
           >
             Login
           </Button>

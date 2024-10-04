@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import HorizontalCard from '../components/HorizontalCard'
+import NewCard from '../components/NewCard';
 
 import { Box, Container, Typography, TextField, Button } from "@mui/material";
 
@@ -30,8 +31,8 @@ const Test = () => {
                 </Typography>
                 <Typography variant='h6'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt quas libero illum atque perspiciatis quae recusandae ducimus? Animi ratione recusandae debitis, deleniti, eos dolorum iste et cupiditate pariatur impedit asperiores.</Typography>
                 </Box>
-                
             </Box>
+           
         </Container>
 
     </>
