@@ -167,11 +167,12 @@ const Blogs = () => {
         style={{ 
           width: '20%', 
           height: 'auto', 
+          padding: '15px'
          
         }} />
       </Box>
 
-      <Box sx={{ display: 'flex',alignItems: 'center', justifyContent:"center"}}>
+      <Box sx={{ display: 'flex',alignItems: 'center', justifyContent:"center", paddingBottom: 2 }}>
       
         <Typography variant='h4' color="black" sx={{textAlign:'center'}}>THAT BUSINESS OF MEANING</Typography>
       </Box>
