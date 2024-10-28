@@ -31,6 +31,22 @@ const Blogs = () => {
   const pageSize = 18;
   const navigate = useNavigate();
 
+  const words = [
+    'brand',
+    'identity',
+    'imagination',
+    'business',
+    'ethnography',
+    'future',
+    'civic',
+    'technology',
+    'philosophy',
+    'qual',
+  ];
+  useEffect(() => {
+    setTags(words);
+  }, []);
+
   const yearList = [
     { value: null, label: 'All Years' },
     { value: 2019, label: 'Year 2019' },
@@ -104,16 +120,16 @@ const Blogs = () => {
       if (response.data['blogs'].length === 0) {
         setBlogs([]);
         setBlogCount(response.data['count']);
-        setTags(response.data['top_tags'])
+        // setTags(response.data['top_tags'])
         
       
       } else{
         
         setBlogs(response.data['blogs']);
         setBlogCount(response.data['count']);
-        setTags(response.data['top_tags'])
+        // setTags(response.data['top_tags'])
       }
-      console.log("tag=",tag)
+      // console.log("tag=",tag)
       setLoading(false); // Set loading to false after data is fetched
     } catch (err) {
       setError('Failed to fetch blogs');
