@@ -394,7 +394,7 @@ const Blogs = () => {
               console.log(newPage); // Log the new page
               if (newPage !== null) {
                 setPage(newPage - 1); 
-                window.scrollTo(0, 0);
+                window.scrollTo(0, 500);
               }
             }}
           />  
